@@ -1,6 +1,6 @@
 [package]
 name = "gum-rs"
-version = "0.0.1"
+version = "0.0.3"
 description = "Super fast git multiple user config manager. A Rust remake of https://github.com/gauseen/gum"
 authors = ["slow-groovin"]
 repository = "https://github.com/slow-groovin/gum-rs"
@@ -21,6 +21,7 @@ serde_json = "1.0"
 log = "0.4"
 env_logger = "0.10"
 anyhow = "1.0"
+dirs = "6.0"
 
 [dev-dependencies]
 tempfile = "3.0"

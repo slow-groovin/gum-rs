@@ -12,7 +12,7 @@ This is a command-line tool for managing multiple Git user configurations. It al
 
 ## Installation
 
-
+See the steps on the [releases](https://github.com/slow-groovin/gum-rs/releases) page.
 
 ## Usage
 
