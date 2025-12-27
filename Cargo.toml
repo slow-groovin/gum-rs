@@ -1,12 +1,16 @@
 [package]
 name = "gum-rs"
-version = "0.0.3"
+version = "0.0.4"
 description = "Super fast git multiple user config manager. A Rust remake of https://github.com/gauseen/gum"
 authors = ["slow-groovin"]
 repository = "https://github.com/slow-groovin/gum-rs"
 license = "MIT"
 edition = "2024"
 homepage = "https://github.com/slow-groovin/gum-rs"
+
+[[bin]]
+name = "gum"
+path = "src/main.rs"
 
 [package.metadata.wix]
 upgrade-guid = "3BC01186-9FF9-4971-B68E-08BA2FB951EF"
