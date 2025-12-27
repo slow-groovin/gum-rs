@@ -8,10 +8,9 @@
 //! - Check if current directory is a git repository
 //! - Colored console output
 
-use anyhow::Context;
+use std::io;
 use std::path::PathBuf;
 use std::process::Command;
-
 /// Get configuration file path
 ///
 /// Returns configuration file path based on operating system:
@@ -23,28 +22,11 @@ use std::process::Command;
 /// - `Err`: Error when unable to get configuration directory
 pub fn get_config_path() -> anyhow::Result<PathBuf> {
     log::debug!("Getting config path");
+    let config_dir = dirs::config_dir()
+        .ok_or_else(|| io::Error::new(io::ErrorKind::NotFound, "Cannot obtain config directory"))?;
 
-    #[cfg(windows)]
-    {
-        let appdata =
-            std::env::var("APPDATA").context("Could not find APPDATA environment variable")?;
-        let config_path = PathBuf::from(appdata).join("gum").join("config.jsonc");
-        log::debug!("Config path: {:?}", config_path);
-        Ok(config_path)
-    }
-
-    #[cfg(not(windows))]
-    {
-        let xdg_config_home = std::env::var("XDG_CONFIG_HOME").unwrap_or_else(|_| {
-            let home = home_dir().ok_or("Could not find home directory").unwrap();
-            home.join(".config").to_string_lossy().to_string()
-        });
-        let config_path = PathBuf::from(xdg_config_home)
-            .join("gum")
-            .join("config.jsonc");
-        log::debug!("Config path: {:?}", config_path);
-        Ok(config_path)
-    }
+    let config_dir = config_dir.join("gum").join("config.jsonc");
+    Ok(config_dir)
 }
 
 pub fn is_git_repository() -> bool {
