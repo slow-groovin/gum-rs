@@ -123,9 +123,9 @@
                         <Component Id='binary0' Guid='*'>
                             <File
                                 Id='exe0'
-                                Name='gum-rs.exe'
+                                Name='gum.exe'
                                 DiskId='1'
-                                Source='$(var.CargoTargetBinDir)\gum-rs.exe'
+                                Source='$(var.CargoTargetBinDir)\gum.exe'
                                 KeyPath='yes'/>
                         </Component>
                     </Directory>

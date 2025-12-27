@@ -1,6 +1,6 @@
 [package]
 name = "gum-rs"
-version = "0.0.4"
+version = "0.0.5"
 description = "Super fast git multiple user config manager. A Rust remake of https://github.com/gauseen/gum"
 authors = ["slow-groovin"]
 repository = "https://github.com/slow-groovin/gum-rs"
