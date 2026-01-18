@@ -110,6 +110,10 @@ Configuration file uses JSONC format:
 ```
 
 
+## Debug Log
+```sh
+export RUST_LOG=debug
+```
 
 ## Development
 

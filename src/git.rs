@@ -55,9 +55,7 @@ pub fn get_global_git_user() -> Result<UserConfig, Box<dyn std::error::Error>> {
 
 pub fn get_project_git_user() -> Result<UserConfig, Box<dyn std::error::Error>> {
     log::debug!("Executing git config user.name");
-    let name_output = Command::new("git")
-        .args(["config", "user.name"])
-        .output()?;
+    let name_output = Command::new("git").args(["config", "user.name"]).output()?;
 
     log::debug!("Executing git config user.email");
     let email_output = Command::new("git")
@@ -81,7 +79,12 @@ pub fn get_project_git_user() -> Result<UserConfig, Box<dyn std::error::Error>> 
 }
 
 pub fn set_git_user(user: &UserConfig, global: bool) -> Result<(), Box<dyn std::error::Error>> {
-    log::debug!("Setting git user with global={}, name='{}', email='{}'", global, user.name, user.email);
+    log::debug!(
+        "Setting git user with global={}, name='{}', email='{}'",
+        global,
+        user.name,
+        user.email
+    );
 
     let args = if global {
         vec!["config", "--global", "user.name"]
@@ -89,7 +92,11 @@ pub fn set_git_user(user: &UserConfig, global: bool) -> Result<(), Box<dyn std::
         vec!["config", "user.name"]
     };
 
-    log::debug!("Executing git config {} user.name '{}'", if global { "--global" } else { "" }, user.name);
+    log::debug!(
+        "Executing git config {} user.name '{}'",
+        if global { "--global" } else { "" },
+        user.name
+    );
     let name_status = Command::new("git")
         .args(&args)
         .arg(&user.name)
@@ -97,7 +104,11 @@ pub fn set_git_user(user: &UserConfig, global: bool) -> Result<(), Box<dyn std::
         .map_err(|e| format!("Failed to set git user.name: {}", e))?;
 
     if !name_status.success() {
-        return Err(format!("Failed to set git user.name, exit code: {:?}", name_status.code()).into());
+        return Err(format!(
+            "Failed to set git user.name, exit code: {:?}",
+            name_status.code()
+        )
+        .into());
     }
 
     let args = if global {
@@ -106,7 +117,11 @@ pub fn set_git_user(user: &UserConfig, global: bool) -> Result<(), Box<dyn std::
         vec!["config", "user.email"]
     };
 
-    log::debug!("Executing git config {} user.email '{}'", if global { "--global" } else { "" }, user.email);
+    log::debug!(
+        "Executing git config {} user.email '{}'",
+        if global { "--global" } else { "" },
+        user.email
+    );
     let email_status = Command::new("git")
         .args(&args)
         .arg(&user.email)
@@ -114,7 +129,11 @@ pub fn set_git_user(user: &UserConfig, global: bool) -> Result<(), Box<dyn std::
         .map_err(|e| format!("Failed to set git user.email: {}", e))?;
 
     if !email_status.success() {
-        return Err(format!("Failed to set git user.email, exit code: {:?}", email_status.code()).into());
+        return Err(format!(
+            "Failed to set git user.email, exit code: {:?}",
+            email_status.code()
+        )
+        .into());
     }
 
     log::debug!("Git user set successfully");

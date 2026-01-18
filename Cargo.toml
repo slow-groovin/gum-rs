@@ -1,6 +1,6 @@
 [package]
 name = "gum-rs"
-version = "0.0.5"
+version = "0.0.6"
 description = "Super fast git multiple user config manager. A Rust remake of https://github.com/gauseen/gum"
 authors = ["slow-groovin"]
 repository = "https://github.com/slow-groovin/gum-rs"
@@ -32,11 +32,11 @@ tempfile = "3.0"
 
 
 [profile.release]
-opt-level = 'z'    
-lto = true         
-codegen-units = 1  
-strip = true       
-panic = 'abort'    
+opt-level = 'z'
+lto = true
+codegen-units = 1
+strip = true
+panic = 'abort'
 
 # The profile that 'dist' will build with
 [profile.dist]

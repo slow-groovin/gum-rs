@@ -57,18 +57,24 @@ fn handle_list(config: &Config) -> Result<(), Box<dyn std::error::Error>> {
     log::info!("Executing list command");
 
     // Use cached configuration directly
-    let using = config.get_using_git_user()?;
-    utils::printer(
-        &format!("Currently using: {} <{}>", using.name, using.email),
-        "yellow",
-    );
-    println!();
+    match config.get_using_git_user() {
+        Ok(using) => {
+            utils::printer(
+                &format!("Currently using: {} <{}>", using.name, using.email),
+                "yellow",
+            );
+        }
+        Err(_) => {
+            utils::printer("Currently using: none", "yellow");
+        }
+    }
 
     let all_config = config.get_all_config_info();
 
     if all_config.is_empty() {
         log::info!("No user configuration found");
-        println!("No user configuration found.");
+        // println!("No user configuration found.");
+        print_config_table(&all_config);
         return Ok(());
     }
 
@@ -136,7 +142,11 @@ fn handle_use(
     group_name: String,
     global: bool,
 ) -> Result<(), Box<dyn std::error::Error>> {
-    log::info!("Executing use command, target group: {} (global: {})", group_name, global);
+    log::info!(
+        "Executing use command, target group: {} (global: {})",
+        group_name,
+        global
+    );
 
     let all_config = config.get_all_config_info();
     let user = all_config
@@ -197,7 +207,10 @@ fn handle_delete(
     if config.groups.remove(&group_name).is_some() {
         config.save()?;
         log::info!("Successfully deleted group: {}", group_name);
-        utils::printer(&format!("Successfully deleted {} group", group_name), "green");
+        utils::printer(
+            &format!("Successfully deleted {} group", group_name),
+            "green",
+        );
         println!();
         Ok(())
     } else {
@@ -207,28 +220,58 @@ fn handle_delete(
         Err(format!("{} group not found", group_name).into())
     }
 }
-
-/// Print configuration table
 fn print_config_table(all_config: &HashMap<String, UserConfig>) {
-    println!("┌────────────┬─────────┬─────────────────────────┐");
-    println!("│ group-name │    name │                   email │");
-    println!("├────────────┼─────────┼─────────────────────────┤");
+    let mut max_group = 10;
+    let mut max_name = 4;
+    let mut max_email = 5;
 
     for (group_name, user) in all_config {
-        let group_name_trunc = truncate_str(group_name, 10);
-        let name_trunc = truncate_str(&user.name, 7);
-        let email_trunc = truncate_str(&user.email, 23);
+        max_group = max_group.max(group_name.len());
+        max_name = max_name.max(user.name.len());
+        max_email = max_email.max(user.email.len());
+    }
 
+    println!(
+        "┌{0:─<1$}┬{0:─<2$}┬{0:─<3$}┐",
+        "─",
+        max_group + 2,
+        max_name + 2,
+        max_email + 2
+    );
+    println!(
+        "│ {:<width_g$} │ {:<width_n$} │ {:<width_e$} │",
+        "group-name",
+        "name",
+        "email",
+        width_g = max_group,
+        width_n = max_name,
+        width_e = max_email
+    );
+    println!(
+        "├{0:─<1$}┼{0:─<2$}┼{0:─<3$}┤",
+        "─",
+        max_group + 2,
+        max_name + 2,
+        max_email + 2
+    );
+
+    for (group_name, user) in all_config {
         println!(
-            "│ {:10} │ {:7} │ {:23} │",
-            group_name_trunc, name_trunc, email_trunc
+            "│ {:<width_g$} │ {:<width_n$} │ {:<width_e$} │",
+            group_name,
+            user.name,
+            user.email,
+            width_g = max_group,
+            width_n = max_name,
+            width_e = max_email
         );
     }
 
-    println!("└────────────┴─────────┴─────────────────────────┘");
-}
-
-/// Truncate string
-fn truncate_str(s: &str, max_len: usize) -> &str {
-    if s.len() <= max_len { s } else { &s[..max_len] }
+    println!(
+        "└{0:─<1$}┴{0:─<2$}┴{0:─<3$}┘",
+        "─",
+        max_group + 2,
+        max_name + 2,
+        max_email + 2
+    );
 }
