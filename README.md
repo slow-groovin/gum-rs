@@ -12,6 +12,27 @@ This is a command-line tool for managing multiple Git user configurations. It al
 
 ## Installation
 
+### Linux/Macos
+
+Install via Bash Script:
+
+```bash
+curl --proto '=https' --tlsv1.2 -LsSf https://github.com/slow-groovin/gum-rs/releases/latest/download/gum-rs-installer.sh | sh
+```
+
+Install via Homebrew:
+```bash
+brew install slow-groovin/tap/gum-rs
+```
+
+### Windows
+
+```sh
+powershell -ExecutionPolicy Bypass -c "irm https://github.com/slow-groovin/gum-rs/releases/latest/download/gum-rs-installer.ps1 | iex"
+```
+
+
+### Prebuilt binaries 
 See the steps on the [releases](https://github.com/slow-groovin/gum-rs/releases) page.
 
 ## Usage
